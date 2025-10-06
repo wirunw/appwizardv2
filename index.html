@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppWizard - สร้างเว็บแอปใน 4 ขั้นตอน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        h1, h2, h3 { font-family: 'Kanit', sans-serif; }
+        .step-card, .category-section { transition: all 0.3s ease-in-out; opacity: 1; transform: translateY(0); }
+        .hidden { opacity: 0; transform: translateY(20px); height: 0; overflow: hidden; margin: 0; padding: 0; }
+        .code-block { position: relative; background-color: #1E293B; color: #E2E8F0; padding: 1rem; border-radius: 0.5rem; font-family: monospace; }
+        .code-block pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background-color: #334155; color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; }
+        .copy-btn:hover { background-color: #475569; }
+        .custom-field { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; align-items: center; }
+        @media (min-width: 640px) { .custom-field { grid-template-columns: 1fr 1fr 1fr auto auto; } }
+        .app-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .app-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <header class="text-center mb-12">
+            <img src="https://i.postimg.cc/dDfBQVWf/wirun-facbook.png" alt="AppWizard Logo" class="h-24 w-24 mx-auto mb-4 rounded-full border-4 border-white shadow-lg">
+            <h1 class="text-6xl font-bold text-slate-800">AppWizard</h1>
+            <p class="text-slate-600 mt-2 text-lg">สร้าง Web App ของคุณเองง่ายๆ เพียงไม่กี่ขั้นตอน</p>
+        </header>
+
+        <!-- Infographic Section -->
+        <div class="mb-12 px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-center h-16 w-16 bg-emerald-500 text-white rounded-full shadow-md text-2xl mb-3">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-700">1. เลือกประเภทแอป</h3>
+                    <p class="text-sm text-slate-500">เลือกเทมเพลตที่ต้องการ</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-center h-16 w-16 bg-emerald-500 text-white rounded-full shadow-md text-2xl mb-3">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-700">2. ตั้งค่ารายละเอียด</h3>
+                    <p class="text-sm text-slate-500">กรอกข้อมูลเฉพาะของคุณ</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-center h-16 w-16 bg-emerald-500 text-white rounded-full shadow-md text-2xl mb-3">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-700">3. สร้าง Backend</h3>
+                    <p class="text-sm text-slate-500">ติดตั้งโค้ดฝั่ง Server</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-center h-16 w-16 bg-emerald-500 text-white rounded-full shadow-md text-2xl mb-3">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-700">4. รับโค้ด Frontend</h3>
+                    <p class="text-sm text-slate-500">นำเว็บแอปไปใช้งาน</p>
+                </div>
+            </div>
+        </div>
+
+
+        <main class="space-y-6">
+            <!-- Step 1: App Selection -->
+            <div id="step1" class="step-card bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold text-emerald-600 mb-1">ขั้นตอนที่ 1: เลือกประเภทแอปพลิเคชัน</h2>
+                <p class="text-slate-500 mb-8">เลือกโปรเจกต์ที่คุณต้องการสร้างจากรายการด้านล่างนี้</p>
+                
+                <div id="appSelectionContainer" class="space-y-8">
+                    <!-- Categories will be injected here by JS -->
+                </div>
+            </div>
+
+            <!-- Step 2: Configuration -->
+            <div id="step2" class="step-card bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold text-emerald-600 mb-1">ขั้นตอนที่ 2: ตั้งค่ารายละเอียด</h2>
+                <p class="text-slate-500 mb-6">กรอกข้อมูลพื้นฐานสำหรับแอปพลิเคชัน <b id="selectedAppName" class="text-slate-700"></b></p>
+                <div id="configContainer" class="space-y-4"></div>
+                <div id="customFieldsBuilder" class="hidden mt-6">
+                     <h3 class="font-bold text-slate-800 mb-2">ออกแบบฟอร์มของคุณ:</h3>
+                     <div id="customFieldsContainer" class="space-y-3"></div>
+                     <button id="addCustomFieldButton" type="button" class="mt-4 text-emerald-600 font-semibold hover:text-emerald-700">+ เพิ่มฟิลด์ใหม่</button>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <button id="backToStep1Button" class="w-1/3 bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-lg hover:bg-slate-300 transition-colors">ย้อนกลับ</button>
+                    <button id="toStep3Button" class="w-2/3 bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors">ถัดไป: สร้าง Backend</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Backend Generation -->
+            <div id="step3" class="step-card bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold text-emerald-600 mb-1">ขั้นตอนที่ 3: สร้าง Backend (Google Apps Script)</h2>
+                <p class="text-slate-500 mb-4">ทำตามขั้นตอนต่อไปนี้เพื่อติดตั้งโค้ดฝั่ง Server:</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-6 bg-slate-50 p-4 rounded-lg">
+                    <li>ไปที่ <a href="https://script.google.com/home/my" target="_blank" class="text-emerald-600 hover:underline">script.google.com</a> และสร้างโปรเจกต์ใหม่</li>
+                    <li>ลบโค้ดเก่าทิ้งทั้งหมด และ **คัดลอกโค้ดด้านล่าง** ไปวางแทน</li>
+                    <li>กด **Deploy > New deployment** เลือกประเภทเป็น **Web app**</li>
+                    <li>ตั้งค่า **Execute as** เป็น **Me**</li>
+                    <li>ตั้งค่า **Who has access** เป็น **Anyone** แล้วกด Deploy</li>
+                    <li>**สำคัญมาก:** คัดลอก **Web app URL** ที่ได้ มาวางในช่องด้านล่างนี้</li>
+                </ol>
+                <h3 class="font-bold text-slate-800 mb-2">โค้ด Google Apps Script:</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('backendCodeDisplay')">คัดลอก</button>
+                    <pre><code id="backendCodeDisplay"></code></pre>
+                </div>
+                <div class="mt-6">
+                    <label for="appsScriptUrlInput" class="block font-medium text-slate-700 mb-2">วาง Web app URL ที่ได้จาก Google:</label>
+                    <input type="url" id="appsScriptUrlInput" placeholder="https://script.google.com/macros/s/..." class="w-full p-3 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+                <button id="toStep4Button" class="w-full mt-6 bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors">ถัดไป: สร้าง Frontend</button>
+            </div>
+
+            <!-- Step 4: Frontend Generation -->
+            <div id="step4" class="step-card bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold text-emerald-600 mb-1">ขั้นตอนที่ 4: สร้าง Frontend (Web App)</h2>
+                <p class="text-slate-500 mb-4">ยินดีด้วย! นี่คือโค้ดสำหรับหน้าเว็บของคุณ สามารถบันทึกเป็นไฟล์ .html เพื่อเปิดในเบราว์เซอร์ได้เลย</p>
+                <h3 class="font-bold text-slate-800 mb-2">โค้ด HTML (ทั้งหมดในไฟล์เดียว):</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('frontendCodeDisplay')">คัดลอก</button>
+                    <pre><code id="frontendCodeDisplay"></code></pre>
+                </div>
+                <button id="startOverButton" class="w-full mt-8 bg-slate-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-slate-800 transition-colors">สร้างแอปใหม่อีกครั้ง</button>
+            </div>
+        </main>
+
+        <footer class="text-center mt-10 text-slate-500 text-sm">
+            <div class="flex items-center justify-center space-x-4">
+                 <img src="https://i.postimg.cc/dDfBQVWf/wirun-facbook.png" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white shadow-md">
+                 <p>ออกแบบโดยเภสัชกรวิรุณ เวชศิริ<br><a href="http://www.pharmconnection.net" target="_blank" class="text-emerald-600 hover:underline">www.pharmconnection.net</a></p>
+            </div>
+        </footer>
+    </div>
+
+<script>
+    // --- App Definitions ---
+    const appCategories = {
+        "ธุรกิจ / การทำงาน": {
+            icon: "fa-solid fa-briefcase",
+            apps: {
+                contactForm: { name: 'เว็บ "ติดต่อเรา"', description: 'ฟอร์มสำหรับรับข้อความจากหน้าเว็บ', dataFields: ['name', 'email', 'message'], frontendType: 'standard', frontendFields: [ { id: 'name', label: 'ชื่อ-นามสกุล', type: 'text', required: true }, { id: 'email', label: 'อีเมล', type: 'email', required: true }, { id: 'message', label: 'ข้อความ', type: 'textarea', required: true } ] },
+                storePos: { name: 'ระบบ POS ร้านสะดวกซื้อ', description: 'บันทึกการขายพร้อมคำนวณเงินทอน', dataFields: ['transactionId', 'itemName', 'itemQuantity', 'itemPrice', 'itemSubtotal', 'totalAmount', 'cashReceived', 'changeGiven', 'paymentMethod', 'cashier'], frontendType: 'storePOS' }
+            }
+        },
+        "การแพทย์ / ร้านยา": {
+            icon: "fa-solid fa-notes-medical",
+            apps: {
+                pharmacyPos: { name: 'ระบบ POS ร้านยา (พร้อมตะกร้า)', description: 'บันทึกการขายยาพร้อมคำนวณเงินทอน', dataFields: ['transactionId', 'patientName', 'hn', 'phone', 'itemName', 'itemQuantity', 'itemPrice', 'itemSubtotal', 'totalAmount', 'cashReceived', 'changeGiven', 'pharmacist'], frontendType: 'pharmacyPOS' },
+                clinicPatientRecord: { name: 'บันทึกข้อมูลคนไข้ (คลินิก)', description: 'สำหรับบันทึกประวัติการรักษาที่คลินิก', dataFields: ['patientName', 'hn', 'dob', 'allergies', 'chiefComplaint', 'diagnosis', 'doctorName'], frontendType: 'standard', frontendFields: [ { id: 'patientName', label: 'ชื่อคนไข้', type: 'text', required: true }, { id: 'hn', label: 'HN (ถ้ามี)', type: 'text', required: false }, { id: 'dob', label: 'วัน/เดือน/ปี เกิด', type: 'date', required: false }, { id: 'allergies', label: 'ประวัติแพ้ยา', type: 'textarea', required: false }, { id: 'chiefComplaint', label: 'อาการสำคัญ', type: 'textarea', required: true }, { id: 'diagnosis', label: 'การวินิจฉัย', type: 'textarea', required: false }, { id: 'doctorName', label: 'ชื่อแพทย์ผู้ตรวจ', type: 'text', required: true } ] },
+                pharmacistHomeVisit: { name: 'บันทึกเภสัชกรเยี่ยมบ้าน', description: 'บันทึกข้อมูลการติดตามผู้ป่วยที่บ้าน', dataFields: ['patientName', 'visitDate', 'assessment', 'plan', 'pharmacistName'], frontendType: 'standard', frontendFields: [ { id: 'patientName', label: 'ชื่อผู้ป่วย', type: 'text', required: true }, { id: 'visitDate', label: 'วันที่เยี่ยม', type: 'date', required: true }, { id: 'assessment', label: 'การประเมิน (SOAP)', type: 'textarea', required: true }, { id: 'plan', label: 'แผนการดูแล', type: 'textarea', required: true }, { id: 'pharmacistName', label: 'ชื่อเภสัชกร', type: 'text', required: true } ] }
+            }
+        },
+        "ส่วนตัว / งานอดิเรก": {
+            icon: "fa-solid fa-person-running",
+            apps: {
+                workoutLogger: { name: 'แอปบันทึกการออกกำลังกาย', description: 'จดสถิติการออกกำลังกายประจำวัน', dataFields: ['exercise', 'sets', 'reps', 'weight'], frontendType: 'standard', frontendFields: [ { id: 'exercise', label: 'ท่าที่เล่น', type: 'text', required: true }, { id: 'sets', label: 'จำนวนเซ็ต', type: 'number', required: true }, { id: 'reps', label: 'จำนวนครั้ง/เซ็ต', type: 'number', required: true }, { id: 'weight', label: 'น้ำหนัก (กก.)', type: 'number', required: false } ] },
+                expenseTracker: { name: 'ระบบบันทึกรายรับ-รายจ่าย', description: 'บันทึกหลายรายการพร้อมกันได้', dataFields: ['transactionId', 'item', 'amount', 'type'], frontendType: 'expenseTracker' }
+            }
+        },
+        "อื่นๆ": {
+            icon: "fa-solid fa-plus",
+            apps: {
+                custom: { name: 'สร้างด้วยตนเอง', description: 'ออกแบบฟอร์มและฐานข้อมูลของคุณเอง', frontendType: 'standard' }
+            }
+        }
+    };
+    
+    // --- DOM Elements & State ---
+    const dom = {
+        appSelectionContainer: document.getElementById('appSelectionContainer'),
+        steps: { 1: document.getElementById('step1'), 2: document.getElementById('step2'), 3: document.getElementById('step3'), 4: document.getElementById('step4') },
+        configContainer: document.getElementById('configContainer'),
+        customFieldsBuilder: document.getElementById('customFieldsBuilder'),
+        customFieldsContainer: document.getElementById('customFieldsContainer'),
+        addCustomFieldButton: document.getElementById('addCustomFieldButton'),
+        backToStep1Button: document.getElementById('backToStep1Button'),
+        toStep3Button: document.getElementById('toStep3Button'),
+        toStep4Button: document.getElementById('toStep4Button'),
+        startOverButton: document.getElementById('startOverButton'),
+        backendCodeDisplay: document.getElementById('backendCodeDisplay'),
+        frontendCodeDisplay: document.getElementById('frontendCodeDisplay'),
+        appsScriptUrlInput: document.getElementById('appsScriptUrlInput'),
+        selectedAppName: document.getElementById('selectedAppName')
+    };
+
+    let currentConfig = {};
+    let currentAppKey = '';
+
+    // --- Functions ---
+    const goToStep = (stepNumber) => {
+        Object.values(dom.steps).forEach(s => s.classList.add('hidden'));
+        if (dom.steps[stepNumber]) dom.steps[stepNumber].classList.remove('hidden');
+    };
+
+    const createInputElement = (fieldConfig) => {
+        const wrapper = document.createElement('div');
+        const labelEl = document.createElement('label');
+        labelEl.htmlFor = fieldConfig.id;
+        labelEl.className = 'block font-medium text-slate-700 mb-2';
+        labelEl.textContent = fieldConfig.label;
+        wrapper.appendChild(labelEl);
+
+        if (fieldConfig.type === 'color-swatch') {
+            const container = document.createElement('div');
+            container.className = 'flex items-center space-x-3 mt-1';
+            const themeColorClasses = { Emerald: 'bg-emerald-500', Blue: 'bg-blue-500', Indigo: 'bg-indigo-500', Red: 'bg-red-500', Slate: 'bg-slate-500' };
+            fieldConfig.options.forEach(color => {
+                const label = document.createElement('label');
+                label.className = 'cursor-pointer';
+                label.title = color;
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'themeColor';
+                radio.value = color;
+                radio.className = 'hidden peer';
+                if (color === fieldConfig.value) radio.checked = true;
+                const swatch = document.createElement('div');
+                swatch.className = `w-9 h-9 rounded-full ${themeColorClasses[color]} border-2 border-white ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-slate-700 transition-all duration-200`;
+                label.appendChild(radio);
+                label.appendChild(swatch);
+                container.appendChild(label);
+            });
+            wrapper.appendChild(container);
+        } else {
+            const input = document.createElement('input');
+            input.type = fieldConfig.type;
+            input.id = fieldConfig.id;
+            input.placeholder = fieldConfig.placeholder || '';
+            input.value = fieldConfig.value || '';
+            input.className = 'w-full p-3 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500';
+            wrapper.appendChild(input);
+        }
+        return wrapper;
+    };
+
+    const generateConfigForm = (appKey) => {
+        const appTemplate = Object.values(appCategories).flatMap(c => Object.entries(c.apps)).find(([k,v]) => k === appKey)?.[1];
+        if (!appTemplate) return;
+
+        dom.selectedAppName.textContent = appTemplate.name;
+        dom.configContainer.innerHTML = '';
+        const baseFields = [
+            { id: 'appName', label: 'ชื่อแอปพลิเคชัน', type: 'text', value: appTemplate.name },
+            { id: 'sheetId', label: 'Google Sheet ID', type: 'text', placeholder: 'ไอดีของ Google Sheet ที่จะใช้เก็บข้อมูล' },
+            { id: 'sheetName', label: 'ชื่อชีต (Sheet Name)', type: 'text', placeholder: 'ถ้าไม่ระบุจะใช้ "Sheet1"' },
+            { id: 'themeColor', label: 'เลือก Theme สี', type: 'color-swatch', options: ['Emerald', 'Blue', 'Indigo', 'Red', 'Slate'], value: 'Emerald' },
+            { id: 'logoUrl', label: 'URL โลโก้ (ถ้ามี)', type: 'url', placeholder: 'https://.../logo.png' }
+        ];
+
+        baseFields.forEach(field => dom.configContainer.appendChild(createInputElement(field)));
+
+        dom.customFieldsBuilder.classList.toggle('hidden', appKey !== 'custom');
+        if (appKey === 'custom') {
+            dom.customFieldsContainer.innerHTML = '';
+            addCustomFieldInput();
+        }
+    };
+    
+    const addCustomFieldInput = () => {
+        const div = document.createElement('div');
+        div.className = 'custom-field p-2 border rounded-md bg-slate-50';
+        div.innerHTML = `<input type="text" data-type="label" placeholder="ป้ายกำกับ (เช่น ชื่อ-สกุล)" class="p-2 border-2 rounded-md text-sm"><input type="text" data-type="id" placeholder="ID (อังกฤษ, ห้ามเว้นวรรค)" class="p-2 border-2 rounded-md text-sm"><select data-type="type" class="p-2 border-2 rounded-md text-sm bg-white"><option value="text">Text</option><option value="email">Email</option><option value="number">Number</option><option value="tel">Phone</option><option value="textarea">Textarea</option></select><label class="flex items-center justify-center text-sm"><input type="checkbox" data-type="required" class="mr-1 h-4 w-4">บังคับ</label><button type="button" class="text-red-500 hover:text-red-700 font-bold text-lg" onclick="this.parentElement.remove()">×</button>`;
+        dom.customFieldsContainer.appendChild(div);
+    };
+
+    const captureConfig = () => {
+        currentConfig = {};
+        let allFilled = true;
+        const baseFieldIds = ['appName', 'sheetId', 'sheetName', 'themeColor', 'logoUrl'];
+        baseFieldIds.forEach(id => {
+            if (id === 'themeColor') {
+                const selectedRadio = document.querySelector('input[name="themeColor"]:checked');
+                currentConfig.themeColor = selectedRadio ? selectedRadio.value : 'Emerald';
+            } else {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (!el.value.trim() && !['sheetName', 'logoUrl'].includes(id)) {
+                        allFilled = false;
+                    }
+                    currentConfig[id] = el.value.trim();
+                }
+            }
+        });
+        
+        if (currentAppKey === 'custom') {
+            const customTemplate = { dataFields: [], frontendType: 'standard', frontendFields: [] };
+            const fieldElements = dom.customFieldsContainer.querySelectorAll('.custom-field');
+            if(fieldElements.length === 0) { alert('กรุณาเพิ่มฟิลด์อย่างน้อย 1 ฟิลด์ครับ'); return false; }
+            fieldElements.forEach(fieldEl => {
+                const label = fieldEl.querySelector('[data-type="label"]').value.trim();
+                const id = fieldEl.querySelector('[data-type="id"]').value.trim().replace(/\s+/g, '_');
+                const type = fieldEl.querySelector('[data-type="type"]').value;
+                const required = fieldEl.querySelector('[data-type="required"]').checked;
+                if (!label || !id) allFilled = false;
+                customTemplate.dataFields.push(id);
+                customTemplate.frontendFields.push({ id, label, type, required });
+            });
+            currentConfig.customTemplate = customTemplate;
+        }
+
+        if (!allFilled) { alert('กรุณากรอกข้อมูลในช่องตั้งค่าให้ครบถ้วนครับ'); return false; }
+        return true;
+    };
+    
+    const generateBackendCode = (template, config) => {
+        const sheetHandlingLogic = `
+    const ss = SpreadsheetApp.openById("${config.sheetId}");
+    const sheetName = "${config.sheetName || 'Sheet1'}";
+    let sheet = ss.getSheetByName(sheetName);
+
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+    }`;
+
+        const doGetFunction = `
+function doGet(e) {
+  try {
+    ${sheetHandlingLogic}
+    const data = sheet.getDataRange().getValues();
+    if (data.length < 2) { // Only headers or empty
+        return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
+    }
+    const headers = data.shift();
+    const jsonData = data.map(row => {
+      let obj = {};
+      headers.forEach((header, i) => {
+        obj[header] = row[i];
+      });
+      return obj;
+    });
+    return ContentService.createTextOutput(JSON.stringify(jsonData)).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": err.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+    
+        let doPostFunction = '';
+        const posLikeLogic = `
+function doPost(e) {
+  try {
+    ${sheetHandlingLogic}
+    const headers = %HEADERS%;
+    if (sheet.getLastRow() < 1) { sheet.appendRow(headers); }
+    
+    const data = JSON.parse(e.postData.contents);
+    const transactionId = new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
+    const items = JSON.parse(data.items);
+
+    items.forEach(item => {
+      const newRow = %NEW_ROW_LOGIC%;
+      sheet.appendRow(newRow);
+    });
+    
+    return ContentService.createTextOutput(JSON.stringify({ "status": "success", "message": "บันทึกข้อมูลเรียบร้อย" })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": err.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+        if (template.frontendType === 'pharmacyPOS') {
+            const headers = JSON.stringify(['Timestamp', ...template.dataFields]);
+            const newRowLogic = "[ new Date(), transactionId, data.patientName, data.hn, data.phone, item.name, item.quantity, item.price, (item.quantity * item.price), data.totalAmount, data.cashReceived, data.changeGiven, data.pharmacist ]";
+            doPostFunction = posLikeLogic.replace('%HEADERS%', headers).replace('%NEW_ROW_LOGIC%', newRowLogic).replace('JSON.parse(data.items)', 'JSON.parse(data.cartItems)');
+        } else if (template.frontendType === 'storePOS') {
+            const headers = JSON.stringify(['Timestamp', ...template.dataFields]);
+            const newRowLogic = "[ new Date(), transactionId, item.name, item.quantity, item.price, (item.quantity * item.price), data.totalAmount, data.cashReceived, data.changeGiven, data.paymentMethod, data.cashier ]";
+            doPostFunction = posLikeLogic.replace('%HEADERS%', headers).replace('%NEW_ROW_LOGIC%', newRowLogic).replace('JSON.parse(data.items)', 'JSON.parse(data.cartItems)');
+        } else if (template.frontendType === 'expenseTracker') {
+            const headers = JSON.stringify(['Timestamp', ...template.dataFields]);
+            const newRowLogic = "[ new Date(), transactionId, item.item, item.amount, item.type ]";
+            doPostFunction = posLikeLogic.replace('%HEADERS%', headers).replace('%NEW_ROW_LOGIC%', newRowLogic);
+        } else {
+            const headers = JSON.stringify(['Timestamp', ...template.dataFields]);
+            const dataValues = template.dataFields.map(field => `data.${field}`).join(', ');
+            doPostFunction = `
+function doPost(e) {
+  try {
+    ${sheetHandlingLogic}
+    if (sheet.getLastRow() < 1) { sheet.appendRow(${headers}); }
+    
+    const data = JSON.parse(e.postData.contents);
+    const newRow = [new Date(), ${dataValues}];
+    sheet.appendRow(newRow);
+    
+    return ContentService.createTextOutput(JSON.stringify({ "status": "success", "message": "บันทึกข้อมูลเรียบร้อย" })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": err.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+        }
+
+        return doGetFunction + '\n\n' + doPostFunction;
+    };
+
+    const generateStandardFrontendCode = (template, config, selectedTheme) => {
+        const formFieldsHtml = template.frontendFields.map(field => {
+            const requiredAttr = field.required ? 'required' : '';
+            const requiredSpan = field.required ? '<span class="text-red-500">*</span>' : '';
+            const commonClasses = `mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm sm:text-sm p-2 ${selectedTheme.border} ${selectedTheme.ring}`;
+            if (field.type === 'textarea') return `<div><label for="${field.id}" class="block text-sm font-medium text-gray-700">${field.label} ${requiredSpan}</label><textarea id="${field.id}" name="${field.id}" rows="4" class="${commonClasses}" ${requiredAttr}></textarea></div>`;
+            if (field.type === 'select') { const optionsHtml = field.options.map(opt => `<option value="${opt}">${opt}</option>`).join(''); return `<div><label for="${field.id}" class="block text-sm font-medium text-gray-700">${field.label} ${requiredSpan}</label><select id="${field.id}" name="${field.id}" class="${commonClasses} bg-white" ${requiredAttr}>${optionsHtml}</select></div>`; }
+            return `<div><label for="${field.id}" class="block text-sm font-medium text-gray-700">${field.label} ${requiredSpan}</label><input type="${field.type}" name="${field.id}" id="${field.id}" class="${commonClasses}" ${requiredAttr}></div>`;
+        }).join('');
+        return `<form id="dataForm" class="space-y-6">${formFieldsHtml}<button type="submit" id="submitBtn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${selectedTheme.bg} ${selectedTheme.hover} focus:outline-none focus:ring-2 focus:ring-offset-2 ${selectedTheme.ring}">ส่งข้อมูล</button></form><div id="responseMsg" class="text-center text-sm font-semibold mt-4"></div>`;
+    };
+    
+    const generatePOSLikeCode = (type, config, selectedTheme) => {
+        const isPharmacy = type === 'pharmacyPOS';
+        const itemLabel = isPharmacy ? 'ยา' : 'สินค้า';
+        const headerHtml = isPharmacy ? `
+            <div><label for="patientName" class="block text-sm font-medium text-gray-700">ชื่อคนไข้ <span class="text-red-500">*</span></label><input type="text" id="patientName" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2" required></div>
+            <div><label for="hn" class="block text-sm font-medium text-gray-700">HN</label><input type="text" id="hn" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2"></div>
+            <div><label for="phone" class="block text-sm font-medium text-gray-700">เบอร์โทร</label><input type="tel" id="phone" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2"></div>
+            <div><label for="pharmacist" class="block text-sm font-medium text-gray-700">เภสัชกร <span class="text-red-500">*</span></label><input type="text" id="pharmacist" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2" required></div>
+        ` : `
+            <div>
+                <label for="paymentMethod" class="block text-sm font-medium text-gray-700">วิธีการชำระเงิน <span class="text-red-500">*</span></label>
+                <select id="paymentMethod" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 bg-white" required>
+                    <option>เงินสด</option>
+                    <option>สแกนจ่าย (QR)</option>
+                    <option>บัตรเครดิต</option>
+                </select>
+            </div>
+            <div>
+                <label for="cashier" class="block text-sm font-medium text-gray-700">ชื่อพนักงาน <span class="text-red-500">*</span></label>
+                <input type="text" id="cashier" class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2" required>
+            </div>
+        `;
+
+        return `<form id="posForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 border-b-2 pb-4">${headerHtml}</div>
+            <div class="bg-slate-50 p-4 rounded-lg">
+                <h3 class="font-bold mb-2">เพิ่มรายการ${itemLabel}</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 items-end">
+                    <div class="sm:col-span-2"><label class="text-sm">ชื่อ${itemLabel}</label><input type="text" id="itemName" class="w-full border-2 p-2 rounded-md"></div>
+                    <div><label class="text-sm">จำนวน</label><input type="number" id="quantity" value="1" class="w-full border-2 p-2 rounded-md"></div>
+                    <div><label class="text-sm">ราคา/หน่วย</label><input type="number" id="price" class="w-full border-2 p-2 rounded-md"></div>
+                </div>
+                <div class="flex space-x-2 mt-2">
+                    <button type="button" id="addToCartBtn" class="w-full py-2 px-4 rounded-md text-white ${selectedTheme.bg} ${selectedTheme.hover}">เพิ่มลงตะกร้า</button>
+                    <button type="button" id="resetCartBtn" class="w-1/3 py-2 px-4 rounded-md text-white bg-red-500 hover:bg-red-600">ล้างตะกร้า</button>
+                </div>
+            </div>
+            <h3 class="font-bold mt-4 mb-2">ตะกร้าสินค้า</h3>
+            <div class="border-2 rounded-lg min-h-[100px] p-2 bg-white">
+                <table class="w-full text-sm"><thead class="border-b-2"><tr><th class="text-left p-1">รายการ</th><th class="p-1">จำนวน</th><th class="p-1">ราคา</th><th class="text-right p-1">รวม</th><th></th></tr></thead><tbody id="cartItems"></tbody></table>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4">
+                <div class="text-xl font-bold">ยอดรวม:</div><div id="totalAmount" class="text-xl font-bold text-right">0.00 บาท</div>
+                <div><label>รับเงินมา:</label><input type="number" id="cashReceived" class="w-full border-2 p-2 rounded-md text-right"></div>
+                <div><label>เงินทอน:</label><div id="changeGiven" class="w-full p-2 rounded-md bg-slate-200 text-right font-bold text-lg">0.00</div></div>
+            </div>
+            <button type="submit" id="submitBtn" class="w-full mt-6 py-3 px-4 rounded-md shadow-sm text-lg font-medium text-white ${selectedTheme.bg} ${selectedTheme.hover}">บันทึกการขาย</button>
+            <div id="responseMsg" class="text-center text-sm font-semibold mt-4"></div>
+            <div id="printReceiptBtnContainer" class="text-center mt-2"></div>
+        </form>`;
+    };
+    
+    const generateExpenseTrackerCode = (template, config, selectedTheme) => {
+        return `<form id="expenseForm">
+            <div class="bg-slate-50 p-4 rounded-lg">
+                <h3 class="font-bold mb-2">เพิ่มรายการ</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 items-end">
+                    <div><label class="text-sm">รายการ</label><input type="text" id="expenseItem" class="w-full border-2 p-2 rounded-md"></div>
+                    <div><label class="text-sm">จำนวนเงิน</label><input type="number" id="expenseAmount" class="w-full border-2 p-2 rounded-md"></div>
+                    <div><label class="text-sm">ประเภท</label>
+                        <select id="expenseType" class="w-full border-2 p-2 rounded-md bg-white">
+                            <option value="รายจ่าย">รายจ่าย</option>
+                            <option value="รายรับ">รายรับ</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="flex space-x-2 mt-2">
+                    <button type="button" id="addToListBtn" class="w-full py-2 px-4 rounded-md text-white ${selectedTheme.bg} ${selectedTheme.hover}">เพิ่มลงลิสต์</button>
+                    <button type="button" id="resetListBtn" class="w-1/3 py-2 px-4 rounded-md text-white bg-red-500 hover:bg-red-600">ล้างลิสต์</button>
+                </div>
+            </div>
+
+            <h3 class="font-bold mt-4 mb-2">ลิสต์ที่จะบันทึก</h3>
+            <div class="border-2 rounded-lg min-h-[100px] p-2 bg-white">
+                <table class="w-full text-sm"><thead class="border-b-2"><tr><th class="text-left p-1">รายการ</th><th class="p-1">ประเภท</th><th class="text-right p-1">จำนวนเงิน</th><th></th></tr></thead><tbody id="expenseItems"></tbody></table>
+            </div>
+             <div class="mt-4 text-right text-lg font-bold">รวมรายจ่าย: <span id="totalExpense" class="text-red-600">0.00</span> | รวมรายรับ: <span id="totalIncome" class="text-green-600">0.00</span></div>
+            
+            <button type="submit" id="submitBtn" class="w-full mt-6 py-3 px-4 rounded-md shadow-sm text-lg font-medium text-white ${selectedTheme.bg} ${selectedTheme.hover}">บันทึกข้อมูลทั้งหมด</button>
+            <div id="responseMsg" class="text-center text-sm font-semibold mt-4"></div>
+        </form>`;
+    };
+
+    const generateFrontendCode = (template, config) => {
+        const themes = { Emerald: { bg: 'bg-emerald-600', hover: 'hover:bg-emerald-700', ring: 'focus:ring-emerald-500', border: 'focus:border-emerald-500' }, Blue: { bg: 'bg-blue-600', hover: 'hover:bg-blue-700', ring: 'focus:ring-blue-500', border: 'focus:border-blue-500' }, Indigo: { bg: 'bg-indigo-600', hover: 'hover:bg-indigo-700', ring: 'focus:ring-indigo-500', border: 'focus:border-indigo-500' }, Red: { bg: 'bg-red-600', hover: 'hover:bg-red-700', ring: 'focus:ring-red-500', border: 'focus:border-red-500' }, Slate: { bg: 'bg-slate-600', hover: 'hover:bg-slate-700', ring: 'focus:ring-slate-500', border: 'focus:border-slate-500' } };
+        const selectedTheme = themes[config.themeColor] || themes.Emerald;
+        
+        let contentHtml = '';
+        if (template.frontendType === 'pharmacyPOS' || template.frontendType === 'storePOS') {
+            contentHtml = generatePOSLikeCode(template.frontendType, config, selectedTheme);
+        } else if (template.frontendType === 'expenseTracker') {
+            contentHtml = generateExpenseTrackerCode(template, config, selectedTheme);
+        } else {
+            contentHtml = generateStandardFrontendCode(template, config, selectedTheme);
+        }
+
+        const dataViewerHtml = `
+            <div class="mt-8 border-t-2 pt-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">ข้อมูลที่บันทึกไว้</h2>
+                    <button id="refreshDataBtn" class="px-4 py-2 text-sm font-medium text-white ${selectedTheme.bg} ${selectedTheme.hover} rounded-lg">Refresh</button>
+                </div>
+                <div id="data-container" class="w-full overflow-x-auto bg-white rounded-lg shadow">
+                    <p class="p-4 text-center text-gray-500">กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>`;
+
+        const sharedScript = `
+        <script>
+            const scriptURL = '${config.appsScriptUrl}';
+            let lastSuccessfulSale = null;
+
+            function fetchData() {
+                const container = document.getElementById('data-container');
+                container.innerHTML = '<p class="p-4 text-center text-gray-500">กำลังโหลดข้อมูล...</p>';
+                fetch(scriptURL)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            container.innerHTML = \`<p class="p-4 text-center text-red-500">เกิดข้อผิดพลาด: \${data.message}</p>\`;
+                            return;
+                        }
+                        if (!data || data.length === 0) {
+                            container.innerHTML = '<p class="p-4 text-center text-gray-500">ยังไม่มีข้อมูล</p>';
+                            return;
+                        }
+                        const headers = Object.keys(data[0]);
+                        let table = '<table class="w-full text-sm text-left text-gray-500">';
+                        table += '<thead class="text-xs text-gray-700 uppercase bg-gray-50">';
+                        table += '<tr>' + headers.map(h => \`<th scope="col" class="px-6 py-3">\${h}</th>\`).join('') + '</tr></thead>';
+                        table += '<tbody>';
+                        data.reverse().forEach(row => {
+                            table += '<tr class="bg-white border-b">' + headers.map(h => \`<td class="px-6 py-4">\${row[h]}</td>\`).join('') + '</tr>';
+                        });
+                        table += '</tbody></table>';
+                        container.innerHTML = table;
+                    })
+                    .catch(error => {
+                        console.error('Fetch Error:', error);
+                        container.innerHTML = \`<p class="p-4 text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>\`;
+                    });
+            }
+            
+            document.addEventListener('DOMContentLoaded', fetchData);
+            document.getElementById('refreshDataBtn').addEventListener('click', fetchData);
+        <\/script>`;
+        
+        let appSpecificScript = '';
+        if (template.frontendType === 'pharmacyPOS' || template.frontendType === 'storePOS') {
+            appSpecificScript = `<script>
+                const cart = [];
+                const itemNameEl = document.getElementById('itemName');
+                const quantityEl = document.getElementById('quantity');
+                const priceEl = document.getElementById('price');
+                const addToCartBtn = document.getElementById('addToCartBtn');
+                const resetCartBtn = document.getElementById('resetCartBtn');
+                const cartItemsEl = document.getElementById('cartItems');
+                const totalAmountEl = document.getElementById('totalAmount');
+                const cashReceivedEl = document.getElementById('cashReceived');
+                const changeGivenEl = document.getElementById('changeGiven');
+                const posForm = document.getElementById('posForm');
+                const submitBtn = document.getElementById('submitBtn');
+                const responseMsg = document.getElementById('responseMsg');
+                const printReceiptBtnContainer = document.getElementById('printReceiptBtnContainer');
+
+                const renderCart = () => {
+                    cartItemsEl.innerHTML = '';
+                    let total = 0;
+                    cart.forEach((item, index) => {
+                        const itemTotal = item.quantity * item.price;
+                        total += itemTotal;
+                        const row = document.createElement('tr');
+                        row.innerHTML = \`<td class="p-1">\${item.name}</td><td class="text-center p-1">\${item.quantity}</td><td class="text-center p-1">\${item.price.toFixed(2)}</td><td class="text-right p-1">\${itemTotal.toFixed(2)}</td><td class="text-center"><button type="button" class="text-red-500" onclick="removeFromCart(\${index})">✖</button></td>\`;
+                        cartItemsEl.appendChild(row);
+                    });
+                    totalAmountEl.textContent = \`\${total.toFixed(2)} บาท\`;
+                    calculateChange();
+                };
+
+                const addToCart = () => {
+                    const name = itemNameEl.value.trim();
+                    const quantity = parseInt(quantityEl.value);
+                    const price = parseFloat(priceEl.value);
+                    if (name && quantity > 0 && price >= 0) {
+                        cart.push({ name, quantity, price });
+                        renderCart();
+                        itemNameEl.value = '';
+                        quantityEl.value = '1';
+                        priceEl.value = '';
+                        itemNameEl.focus();
+                    } else { alert('กรุณากรอกข้อมูลสินค้าให้ครบถ้วน'); }
+                };
+                
+                const resetCart = () => { if (confirm('คุณต้องการล้างตะกร้าสินค้าใช่หรือไม่?')) { cart.length = 0; renderCart(); } };
+                window.removeFromCart = (index) => { cart.splice(index, 1); renderCart(); };
+
+                const calculateChange = () => {
+                    const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                    const cash = parseFloat(cashReceivedEl.value) || 0;
+                    const change = cash - total;
+                    changeGivenEl.textContent = (change >= 0 ? change : 0).toFixed(2);
+                };
+
+                addToCartBtn.addEventListener('click', addToCart);
+                resetCartBtn.addEventListener('click', resetCart);
+                cashReceivedEl.addEventListener('input', calculateChange);
+                
+                const printReceipt = () => {
+                    if(!lastSuccessfulSale) return;
+                    let receiptContent = \`
+                        <style> 
+                            body { font-family: monospace; margin: 0; padding: 10px; font-size: 12px; } 
+                            h2, p { margin: 0; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { padding: 2px 0;}
+                            .right { text-align: right; }
+                            .header { text-align: center; margin-bottom: 10px; }
+                        </style>
+                        <div class="header"><h3>${config.appName}</h3><p>ใบเสร็จอย่างย่อ</p><p>\${new Date().toLocaleString('th-TH')}</p></div>
+                        <hr>
+                    \`;
+                    if(lastSuccessfulSale.patientName) { receiptContent += \`<p>ลูกค้า: \${lastSuccessfulSale.patientName}</p>\`; }
+                    receiptContent += '<hr><table>';
+                    JSON.parse(lastSuccessfulSale.cartItems).forEach(item => {
+                        receiptContent += \`<tr><td>\${item.name} (\${item.quantity}x\${item.price.toFixed(2)})</td><td class="right">\${(item.quantity * item.price).toFixed(2)}</td></tr>\`;
+                    });
+                    receiptContent += \`</table><hr>
+                        <table>
+                        <tr><td>ยอดรวม</td><td class="right">\${lastSuccessfulSale.totalAmount}</td></tr>
+                        <tr><td>รับเงิน</td><td class="right">\${lastSuccessfulSale.cashReceived}</td></tr>
+                        <tr><td>เงินทอน</td><td class="right">\${lastSuccessfulSale.changeGiven}</td></tr>
+                        </table>
+                        <hr>
+                        <p style="text-align:center;">ขอบคุณที่ใช้บริการ</p>
+                    \`;
+                    const printWindow = window.open('', '', 'height=500,width=300');
+                    printWindow.document.write(receiptContent);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    printWindow.print();
+                };
+
+                posForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    if (cart.length === 0) { alert('กรุณาเพิ่มสินค้าลงในตะกร้าก่อน'); return; }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'กำลังบันทึก...';
+                    responseMsg.textContent = '';
+                    printReceiptBtnContainer.innerHTML = '';
+                    
+                    const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                    const cash = parseFloat(cashReceivedEl.value) || 0;
+
+                    let data = {};
+                    if ('${template.frontendType}' === 'pharmacyPOS') {
+                        data = { patientName: document.getElementById('patientName').value, hn: document.getElementById('hn').value, phone: document.getElementById('phone').value, pharmacist: document.getElementById('pharmacist').value };
+                    } else { // storePOS
+                        data = { cashier: document.getElementById('cashier').value, paymentMethod: document.getElementById('paymentMethod').value };
+                    }
+
+                    Object.assign(data, {
+                        cartItems: JSON.stringify(cart),
+                        totalAmount: total.toFixed(2),
+                        cashReceived: cash.toFixed(2),
+                        changeGiven: (cash - total >= 0 ? cash - total : 0).toFixed(2),
+                    });
+                    
+                    lastSuccessfulSale = data;
+
+                    fetch(scriptURL, { 
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if(result.status === 'success'){
+                            responseMsg.textContent = '✔ บันทึกข้อมูลเรียบร้อยแล้ว!';
+                            responseMsg.className = 'text-center text-sm font-semibold text-green-600';
+                            printReceiptBtnContainer.innerHTML = '<button type="button" id="printBtn" class="px-4 py-2 text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 rounded-lg">พิมพ์ใบเสร็จ</button>';
+                            document.getElementById('printBtn').addEventListener('click', printReceipt);
+                            posForm.reset();
+                            cart.length = 0;
+                            renderCart();
+                            fetchData(); // Refresh data table
+                        } else {
+                            throw new Error(result.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        responseMsg.textContent = '❌ เกิดข้อผิดพลาด: ' + error.message;
+                        responseMsg.className = 'text-center text-sm font-semibold text-red-600';
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'บันทึกการขาย';
+                    });
+                });
+            <\/script>`;
+        } else if (template.frontendType === 'expenseTracker') {
+            appSpecificScript = `<script>
+                const items = [];
+                const expenseItemEl = document.getElementById('expenseItem');
+                const expenseAmountEl = document.getElementById('expenseAmount');
+                const expenseTypeEl = document.getElementById('expenseType');
+                const addToListBtn = document.getElementById('addToListBtn');
+                const resetListBtn = document.getElementById('resetListBtn');
+                const expenseItemsEl = document.getElementById('expenseItems');
+                const totalExpenseEl = document.getElementById('totalExpense');
+                const totalIncomeEl = document.getElementById('totalIncome');
+                const expenseForm = document.getElementById('expenseForm');
+                const submitBtn = document.getElementById('submitBtn');
+                const responseMsg = document.getElementById('responseMsg');
+
+                const renderList = () => {
+                    expenseItemsEl.innerHTML = '';
+                    let totalExpense = 0;
+                    let totalIncome = 0;
+                    items.forEach((item, index) => {
+                        if(item.type === 'รายจ่าย') totalExpense += item.amount;
+                        else totalIncome += item.amount;
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = \`<td class="p-1">\${item.item}</td><td class="text-center p-1 \${item.type === 'รายจ่าย' ? 'text-red-500' : 'text-green-500'}">\${item.type}</td><td class="text-right p-1">\${item.amount.toFixed(2)}</td><td class="text-center"><button type="button" class="text-red-500" onclick="removeFromList(\${index})">✖</button></td>\`;
+                        expenseItemsEl.appendChild(row);
+                    });
+                    totalExpenseEl.textContent = totalExpense.toFixed(2);
+                    totalIncomeEl.textContent = totalIncome.toFixed(2);
+                };
+
+                const addToList = () => {
+                    const item = expenseItemEl.value.trim();
+                    const amount = parseFloat(expenseAmountEl.value);
+                    const type = expenseTypeEl.value;
+                    if (item && amount > 0) {
+                        items.push({ item, amount, type });
+                        renderList();
+                        expenseItemEl.value = '';
+                        expenseAmountEl.value = '';
+                        expenseItemEl.focus();
+                    } else { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); }
+                };
+                
+                const resetList = () => { if (confirm('คุณต้องการล้างลิสต์ใช่หรือไม่?')) { items.length = 0; renderList(); } };
+                window.removeFromList = (index) => { items.splice(index, 1); renderList(); };
+                
+                addToListBtn.addEventListener('click', addToList);
+                resetListBtn.addEventListener('click', resetList);
+
+                expenseForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    if (items.length === 0) { alert('กรุณาเพิ่มรายการก่อน'); return; }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'กำลังบันทึก...';
+                    responseMsg.textContent = '';
+                    
+                    const data = { items: JSON.stringify(items) };
+
+                    fetch(scriptURL, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(data)
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                        if(result.status === 'success'){
+                            responseMsg.textContent = '✔ บันทึกข้อมูลเรียบร้อยแล้ว!';
+                            responseMsg.className = 'text-center text-sm font-semibold text-green-600';
+                            expenseForm.reset();
+                            items.length = 0;
+                            renderList();
+                            fetchData(); // Refresh data table
+                        } else {
+                            throw new Error(result.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        responseMsg.textContent = '❌ เกิดข้อผิดพลาด: ' + error.message;
+                        responseMsg.className = 'text-center text-sm font-semibold text-red-600';
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'บันทึกข้อมูลทั้งหมด';
+                    });
+                });
+            <\/script>`;
+        }
+        else {
+            // Script for standard forms
+             appSpecificScript = `<script>
+                const form = document.getElementById('dataForm'); 
+                const submitBtn = document.getElementById('submitBtn'); 
+                const responseMsg = document.getElementById('responseMsg'); 
+                
+                form.addEventListener('submit', e => { 
+                    e.preventDefault(); 
+                    submitBtn.disabled = true; 
+                    submitBtn.textContent = 'กำลังส่ง...'; 
+                    responseMsg.textContent = ''; 
+                    const data = { ${template.frontendFields ? template.dataFields.map(field => `${field}: document.getElementById('${field}').value`).join(', ') : ''} }; 
+                    
+                    fetch(scriptURL, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(data)
+                     })
+                    .then(res => res.json())
+                    .then(result => {
+                         if(result.status === 'success'){
+                            responseMsg.textContent = '✔ บันทึกข้อมูลเรียบร้อยแล้ว!';
+                            responseMsg.className = 'text-center text-sm font-semibold text-green-600';
+                            form.reset();
+                            fetchData();
+                         } else {
+                            throw new Error(result.message);
+                         }
+                    })
+                    .catch(error => { 
+                        console.error('Error!', error.message); 
+                        responseMsg.textContent = '❌ เกิดข้อผิดพลาด: ' + error.message; 
+                        responseMsg.className = 'text-center text-sm font-semibold text-red-600'; 
+                    }).finally(() => { 
+                        submitBtn.disabled = false; 
+                        submitBtn.textContent = 'ส่งข้อมูล'; 
+                    }); 
+                });
+            <\/script>`;
+        }
+        
+        const logoHtml = config.logoUrl ? `<img src="${config.logoUrl}" alt="App Logo" class="h-16 w-auto mx-auto mb-4 object-contain">` : '';
+        return `<!DOCTYPE html>\n<html lang="th">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>${config.appName}</title>\n    <script src="https://cdn.tailwindcss.com"><\/script>\n    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">\n    <style> body { font-family: 'Sarabun', sans-serif; } </style>\n</head>\n<body class="bg-gray-100">\n    <div class="min-h-screen flex flex-col items-center justify-center py-8 px-4">\n        <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-xl shadow-2xl">\n            ${logoHtml}\n            <h1 class="text-3xl font-bold text-center text-gray-800">${config.appName}</h1>\n            ${contentHtml}\n        </div>\n         ${dataViewerHtml}\n    </div>\n    ${sharedScript}\n    ${appSpecificScript}\n</body>\n</html>`;
+    };
+
+    const copyCode = (elementId) => {
+        const codeElement = document.getElementById(elementId);
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = codeElement.textContent;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try { document.execCommand('copy'); alert('คัดลอกโค้ดเรียบร้อย!'); } catch (err) { alert('ไม่สามารถคัดลอกได้'); }
+        document.body.removeChild(tempTextArea);
+    };
+
+    // --- Initialization ---
+    const initialize = () => {
+        const container = dom.appSelectionContainer;
+        container.innerHTML = '';
+        for (const [categoryName, category] of Object.entries(appCategories)) {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+            section.innerHTML = `<h3 class="text-xl font-bold text-slate-800 mb-4 border-b-2 border-emerald-500 pb-2 flex items-center"><i class="${category.icon} mr-3"></i>${categoryName}</h3>`;
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+            
+            for (const [appKey, app] of Object.entries(category.apps)) {
+                const card = document.createElement('div');
+                card.className = 'app-card bg-white p-6 rounded-lg border-2 border-slate-200';
+                card.dataset.appKey = appKey;
+                card.innerHTML = `<h4 class="font-bold text-lg text-slate-900">${app.name}</h4><p class="text-sm text-slate-500 mt-1">${app.description}</p>`;
+                card.addEventListener('click', () => {
+                    currentAppKey = appKey;
+                    generateConfigForm(appKey);
+                    goToStep(2);
+                });
+                grid.appendChild(card);
+            }
+            section.appendChild(grid);
+            container.appendChild(section);
+        }
+        
+        // --- Event Listeners Setup ---
+        dom.addCustomFieldButton.addEventListener('click', addCustomFieldInput);
+        dom.backToStep1Button.addEventListener('click', () => goToStep(1));
+        dom.toStep3Button.addEventListener('click', () => { 
+            if (captureConfig()) { 
+                const template = (currentAppKey === 'custom') ? currentConfig.customTemplate : Object.values(appCategories).flatMap(c => Object.entries(c.apps)).find(([k,v]) => k === currentAppKey)?.[1]; 
+                dom.backendCodeDisplay.textContent = generateBackendCode(template, currentConfig); 
+                goToStep(3); 
+            } 
+        });
+        dom.toStep4Button.addEventListener('click', () => { 
+            const url = dom.appsScriptUrlInput.value.trim(); 
+            if (!url) { alert('กรุณาวาง Web app URL'); return; } 
+            currentConfig.appsScriptUrl = url; 
+            const template = (currentAppKey === 'custom') ? currentConfig.customTemplate : Object.values(appCategories).flatMap(c => Object.entries(c.apps)).find(([k,v]) => k === currentAppKey)?.[1]; 
+            dom.frontendCodeDisplay.textContent = generateFrontendCode(template, currentConfig); 
+            goToStep(4); 
+        });
+        dom.startOverButton.addEventListener('click', () => { 
+            currentConfig = {}; currentAppKey = ''; 
+            dom.appsScriptUrlInput.value = ''; 
+            goToStep(1); 
+        });
+
+        goToStep(1);
+    };
+
+    // --- Global Execution ---
+    initialize();
+</script>
+</body>
+</html>
+
